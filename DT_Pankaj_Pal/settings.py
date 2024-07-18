@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "digital_twin"
+    "digital_twin",
+    "import_export",
 ]
 
 MIDDLEWARE = [
