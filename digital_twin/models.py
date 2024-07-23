@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
 import uuid
 
 # project table
@@ -17,55 +18,67 @@ class project(models.Model):
         ('public','public'),
         ('protected','protected')
     )
-    project_id = models.CharField(max_length=120, primary_key=True)
+    id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     project_editors = models.CharField(max_length=100,  default='NA')
-    start_year = models.IntegerField(default=2019)
+    start_year = models.IntegerField(choices=[(r, r) for r in range(1970, datetime.now().year + 1)], default=datetime.now().year)
     acesss = models.CharField(max_length=50, choices= acesss_choice, default='NA')
     crop = models.CharField(max_length=50, choices=crop_choice, default='NA')
-    funding_source = models.CharField(max_length=100, default='Unknown')
+    funding_source = models.CharField(max_length=100, default='null')
     metadata = models.TextField(default='No metadata available')
 
-    # Custom table name
     class Meta:
-        db_table = 'proj'  
+        verbose_name_plural = 'project'
 
 
     def __str__(self):
-        return self.project_id
+        return str(self.id)
     
 
 # location information table
 class location(models.Model):
-    location_id = models.CharField(max_length=100, primary_key=True)
-    year_added = models.CharField(max_length=100, default='Unknown')
-    plot_boundary = models.CharField(max_length=100, default='Unknown')
-    fid = models.CharField(max_length=100, default='Unknown')
-    state_id = models.CharField(max_length=100, default='Unknown')
-    county_id = models.CharField(max_length=100, default='Unknown')
-    latitude = models.CharField(max_length=100, default='Unknown')
-    longitude = models.CharField(max_length=100, default='Unknown')
-    contact_info= models.CharField(max_length=100, default='Unknown')
+    id = models.AutoField(primary_key=True)
+    owner = models.CharField(max_length=100, default='null')
+    year_added = models.IntegerField(choices=[(r, r) for r in range(1970, datetime.now().year + 1)], default=datetime.now().year)
+    plot_boundary = models.CharField(max_length=100, default='null')
+    fid = models.CharField(max_length=100, default='null')
+    country = models.CharField(max_length=100, default='null')
+    state = models.CharField(max_length=100, default='null')
+    county = models.CharField(max_length=100, default='null')
+    city = models.CharField(max_length=100, default='null')
+    steet_address = models.CharField(max_length=100, default='null')
+    latitude = models.CharField(max_length=100, default='null')
+    longitude = models.CharField(max_length=100, default='null')
+    contact_info= models.CharField(max_length=100, default='null')
     metadata = models.TextField(default='No metadata available')
 
+    class Meta:
+        verbose_name_plural = 'location'
+
     def __str__(self):
-        return self.location_id
+        return str(self.id)
 
 # Weather Table
 class weather(models.Model):
-    weather_id = models.CharField(max_length=100, primary_key=True)
+    id = models.AutoField(primary_key=True)
     location_id = models.ForeignKey(location, on_delete=models.CASCADE)
+    
+    class Meta:
+        verbose_name_plural = 'weather'
 
     def __str__(self):
-        return self.weather_id
+        return str(self.id)
 
 # Soil profile table
 class soil_profile(models.Model):
-    soil_id = models.CharField(max_length=100, primary_key=True)
+    id = models.AutoField(primary_key=True)
     location_id = models.ForeignKey(location, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name_plural = 'soil_profile'
+
     def __str__(self):
-        return self.soil_id
+        return str(self.id)
     
 # experement table
 class experement(models.Model):
@@ -84,61 +97,63 @@ class experement(models.Model):
         ('u2','u2'),
         ('u3','u3')
     )
-    experement_id = models.CharField(max_length=100, primary_key=True)
+    id = models.AutoField(primary_key=True)
     project_id = models.ForeignKey(project, on_delete=models.CASCADE)
     location_id = models.ForeignKey(location, on_delete=models.CASCADE)
-    year = models.CharField(max_length=100, default='Unknown')
-    planting_date = models.CharField(max_length=100, default='Unknown')
-    
-    pix_source_1 = models.CharField(max_length=100, default='Unknown')
-    pix_rate_1 = models.CharField(max_length=100, default='Unknown')
-    pix_timing_1 = models.CharField(max_length=100, default='Unknown')
+    year = models.IntegerField(choices=[(r, r) for r in range(1970, datetime.now().year + 1)], default=datetime.now().year)
+    planting_date = models.DateField(default='null')
+    pix_source_1 = models.CharField(max_length=100, default='null')
+    pix_rate_1 = models.CharField(max_length=100, default='null')
+    pix_timing_1 = models.CharField(max_length=100, default='null')
     pix_unit_1 = models.CharField(max_length=50, choices= pix_unit_choice, default='NA')
-    pix_source_2 = models.CharField(max_length=100, default='Unknown')
-    pix_rate_2 = models.CharField(max_length=100, default='Unknown')
-    pix_timing_2 = models.CharField(max_length=100, default='Unknown')
+    pix_source_2 = models.CharField(max_length=100, default='null')
+    pix_rate_2 = models.CharField(max_length=100, default='null')
+    pix_timing_2 = models.CharField(max_length=100, default='null')
     pix_unit_2 = models.CharField(max_length=50, choices= pix_unit_choice, default='NA')
-    pix_source_3 = models.CharField(max_length=100, default='Unknown')
-    pix_rate_3 = models.CharField(max_length=100, default='Unknown')
-    pix_timing_3 = models.CharField(max_length=100, default='Unknown')
+    pix_source_3 = models.CharField(max_length=100, default='null')
+    pix_rate_3 = models.CharField(max_length=100, default='null')
+    pix_timing_3 = models.CharField(max_length=100, default='null')
     pix_unit_3 = models.CharField(max_length=50, choices= pix_unit_choice, default='NA')
 
-    n_source_1 = models.CharField(max_length=100, default='Unknown')
-    n_timing_1 = models.CharField(max_length=100, default='Unknown')
-    n_rate_1 = models.CharField(max_length=100, default='Unknown')
+    n_source_1 = models.CharField(max_length=100, default='null')
+    n_timing_1 = models.CharField(max_length=100, default='null')
+    n_rate_1 = models.CharField(max_length=100, default='null')
     n_unit_1 = models.CharField(max_length=50, choices= n_unit_choice, default='NA')
-    n_source_2 = models.CharField(max_length=100, default='Unknown')
-    n_timing_2 = models.CharField(max_length=100, default='Unknown')
-    n_rate_2 = models.CharField(max_length=100, default='Unknown')
+    n_source_2 = models.CharField(max_length=100, default='null')
+    n_timing_2 = models.CharField(max_length=100, default='null')
+    n_rate_2 = models.CharField(max_length=100, default='null')
     n_unit_2 = models.CharField(max_length=50, choices= n_unit_choice, default='NA')
-    n_source_3 = models.CharField(max_length=100, default='Unknown')
-    n_timing_3 = models.CharField(max_length=100, default='Unknown')
-    n_rate_3 = models.CharField(max_length=100, default='Unknown')
+    n_source_3 = models.CharField(max_length=100, default='null')
+    n_timing_3 = models.CharField(max_length=100, default='null')
+    n_rate_3 = models.CharField(max_length=100, default='null')
     n_unit_3 = models.CharField(max_length=50, choices= n_unit_choice, default='NA')
 
-    defoliation_source_1 = models.CharField(max_length=100, default='Unknown') 
-    defoliation_timing_1 = models.CharField(max_length=100, default='Unknown')
-    defoliation_rate_1 = models.CharField(max_length=100, default='Unknown')
+    defoliation_source_1 = models.CharField(max_length=100, default='null') 
+    defoliation_timing_1 = models.CharField(max_length=100, default='null')
+    defoliation_rate_1 = models.CharField(max_length=100, default='null')
     defoliation_unit_1 = models.CharField(max_length=50, choices= defoliation_unit_choice, default='NA')
-    defoliation_source_2 = models.CharField(max_length=100, default='Unknown')
-    defoliation_timing_2 = models.CharField(max_length=100, default='Unknown')
-    defoliation_rate_2 = models.CharField(max_length=100, default='Unknown')
+    defoliation_source_2 = models.CharField(max_length=100, default='null')
+    defoliation_timing_2 = models.CharField(max_length=100, default='null')
+    defoliation_rate_2 = models.CharField(max_length=100, default='null')
     defoliation_unit_2 = models.CharField(max_length=50, choices= defoliation_unit_choice, default='NA')
-    defoliation_source_3 = models.CharField(max_length=100, default='Unknown')
-    defoliation_timing_3 = models.CharField(max_length=100, default='Unknown')
-    defoliation_rate_3 = models.CharField(max_length=100, default='Unknown')
+    defoliation_source_3 = models.CharField(max_length=100, default='null')
+    defoliation_timing_3 = models.CharField(max_length=100, default='null')
+    defoliation_rate_3 = models.CharField(max_length=100, default='null')
     defoliation_unit_3 = models.CharField(max_length=50, choices= defoliation_unit_choice, default='NA')
 
-    harvest_date = models.CharField(max_length=100, default='Unknown')
-    uav_raw = models.CharField(max_length=100, default='Unknown')
-    satellite_raw = models.CharField(max_length=100, default='Unknown')
-    uav_orthomosiac_RGB = models.CharField(max_length=100, default='Unknown')
-    uav_orthomosiac_MS = models.CharField(max_length=100, default='Unknown')
-    uav_dsm = models.CharField(max_length=100, default='Unknown')
-    metadata = models.CharField(max_length=100, default='Unknown')
+    harvest_date = models.DateField(default='null')
+    uav_raw = models.CharField(max_length=100, default='null')
+    satellite_raw = models.CharField(max_length=100, default='null')
+    uav_orthomosiac_RGB = models.CharField(max_length=100, default='null')
+    uav_orthomosiac_MS = models.CharField(max_length=100, default='null')
+    uav_dsm = models.CharField(max_length=100, default='null')
+    metadata = models.CharField(max_length=100, default='null')
+
+    class Meta:
+        verbose_name_plural = 'experement'
 
     def __str__(self):
-        return self.experement_id
+        return str(self.id)
     
 # uav_data table
 class uav_data(models.Model):
@@ -151,11 +166,12 @@ class uav_data(models.Model):
         ('exg', 'exg'),
         ('ndvi', 'ndvi')
     )
+    id = models.AutoField(primary_key=True)
     experiment_id =  models.ForeignKey(experement, on_delete=models.CASCADE)
-    fid = models.CharField(max_length=100, default='Unknown')
-    feature = models.CharField(max_length=100, choices=feature_choice, default='Unknown')
-    emergence_data = models.CharField(max_length=100, default='Unknown')
-    Yield = models.CharField(max_length=100, default='Unknown')
+    fid = models.CharField(max_length=100, default='null')
+    feature = models.CharField(max_length=100, choices=feature_choice, default='null')
+    emergence_data = models.DateField(default='null')
+    Yield = models.FloatField(null=True, default=None)
     # columns for date field
     
     d_1_1 = models.FloatField(null=True, default=None)
@@ -524,9 +540,15 @@ class uav_data(models.Model):
     d_12_29 = models.FloatField(null=True, default=None)
     d_12_30 = models.FloatField(null=True, default=None)
     d_12_31 = models.FloatField(null=True, default=None)
+
+
+
+    class Meta:
+        verbose_name_plural = 'uav_data'
+
     # end of date field name
     def __str__(self):
-        return f"{self.experiment_id} - {self.fid}"
+        return str(self.id)
     
 
 # satellite_data table
@@ -541,10 +563,11 @@ class satellite_data(models.Model):
         ('exg', 'exg'),
         ('ndvi', 'ndvi')
     )
+    id = models.AutoField(primary_key=True)
     experiment_id =  models.ForeignKey(experement, on_delete=models.CASCADE)
-    fid = models.CharField(max_length=100, default='Unknown')
-    feature = models.CharField(max_length=100, choices=feature_choice, default='Unknown')
-    emergence_data = models.CharField(max_length=100, default='Unknown')
+    fid = models.CharField(max_length=100, default='null')
+    feature = models.CharField(max_length=100, choices=feature_choice, default='null')
+    emergence_data = models.DateField(default='null')
     # columns for date field
     
     d_1_1 = models.FloatField(null=True, default=None)
@@ -913,9 +936,13 @@ class satellite_data(models.Model):
     d_12_29 = models.FloatField(null=True, default=None)
     d_12_30 = models.FloatField(null=True, default=None)
     d_12_31 = models.FloatField(null=True, default=None)
+
+    class Meta:
+        verbose_name_plural = 'satellite_data'
+
     # end of date field name
     def __str__(self):
-        return f"{self.experiment_id} - {self.fid}"
+        return str(self.id)
 
 
 # forecasted_data_uav table
@@ -929,12 +956,13 @@ class forecasted_data_uav(models.Model):
         ('exg', 'exg'),
         ('ndvi', 'ndvi')
     )
+    id = models.AutoField(primary_key=True)
     experiment_id =  models.ForeignKey(experement, on_delete=models.CASCADE)
-    fid = models.CharField(max_length=100, default='Unknown')
-    feature = models.CharField(max_length=100, choices=feature_choice, default='Unknown')
-    emergence_data = models.CharField(max_length=100, default='Unknown')
-    forecasting_date = models.CharField(max_length=100, default='Unknown')
-    pridicted_yield = models.CharField(max_length=100, default='Unknown')
+    fid = models.CharField(max_length=100, default='null')
+    feature = models.CharField(max_length=100, choices=feature_choice, default='null')
+    emergence_data = models.DateField(default='null')
+    forecasting_date = models.DateField(default='null')
+    pridicted_yield = models.FloatField(null=True, default=None)
     # columns for date field
     
     d_1_1 = models.FloatField(null=True, default=None)
@@ -1303,9 +1331,13 @@ class forecasted_data_uav(models.Model):
     d_12_29 = models.FloatField(null=True, default=None)
     d_12_30 = models.FloatField(null=True, default=None)
     d_12_31 = models.FloatField(null=True, default=None)
+
+    class Meta:
+        verbose_name_plural = 'forecasted_data_uav'
+
     # end of date field name
     def __str__(self):
-        return f"{self.experiment_id} - {self.fid}"
+        return str(self.id)
     
 
 # forecasted_data_satellite table
@@ -1319,12 +1351,13 @@ class forecasted_data_satellite(models.Model):
         ('exg', 'exg'),
         ('ndvi', 'ndvi')
     )
+    id = models.AutoField(primary_key=True)
     experiment_id =  models.ForeignKey(experement, on_delete=models.CASCADE)
-    fid = models.CharField(max_length=100, default='Unknown')
-    feature = models.CharField(max_length=100, choices=feature_choice, default='Unknown')
-    emergence_data = models.CharField(max_length=100, default='Unknown')
-    forecasting_date = models.CharField(max_length=100, default='Unknown')
-    pridicted_yield = models.CharField(max_length=100, default='Unknown')
+    fid = models.CharField(max_length=100, default='null')
+    feature = models.CharField(max_length=100, choices=feature_choice, default='null')
+    emergence_data = models.CharField(max_length=100, default='null')
+    forecasting_date = models.CharField(max_length=100, default='null')
+    pridicted_yield = models.CharField(max_length=100, default='null')
     # columns for date field
     
     d_1_1 = models.FloatField(null=True, default=None)
@@ -1693,6 +1726,10 @@ class forecasted_data_satellite(models.Model):
     d_12_29 = models.FloatField(null=True, default=None)
     d_12_30 = models.FloatField(null=True, default=None)
     d_12_31 = models.FloatField(null=True, default=None)
+
+    class Meta:
+        verbose_name_plural = 'forecasted_data_satellite'
+
     # end of date field name
     def __str__(self):
-        return f"{self.experiment_id} - {self.fid}"
+        return str(self.id)

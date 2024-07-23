@@ -1,15 +1,15 @@
 from django.contrib import admin
 from .models import project, location, weather, soil_profile, experement, uav_data, satellite_data, forecasted_data_uav, forecasted_data_satellite
 from import_export.admin import ImportExportModelAdmin
+from import_export import resources
 
 # header in admin area 
 admin.site.site_header = 'Digital Twin Dashboard'
 
-# adding tabels to admin area
 @admin.register(project)
 class ProjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
-        'project_id', 'user_id', 
+        'id', 'user_id', 
         'project_editors', 'start_year', 'acesss',
         'crop','funding_source', 'metadata'
     )
@@ -17,38 +17,38 @@ class ProjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 @admin.register(location)
 class ProjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
-        'location_id','year_added','plot_boundary','fid','state_id','county_id',
+        'id','year_added','plot_boundary','fid','country','state','county', 'city','steet_address',
         'latitude','longitude','contact_info','metadata'
     )
 
 @admin.register(weather)
 class ProjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
-        'weather_id', 'location_id'
+        'id', 'location_id'
     )
 
 @admin.register(soil_profile)
 class ProjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
-        'soil_id', 'location_id'
+        'id', 'location_id'
     )
 
 
 @admin.register(experement)
 class ProjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
-        'experement_id','project_id','location_id','year','planting_date',
+        'id','project_id','location_id','year','planting_date',
         'pix_source_1','pix_rate_1','pix_timing_1','pix_unit_1','pix_source_2','pix_rate_2','pix_timing_2','pix_unit_2','pix_source_3','pix_rate_3',
         'pix_timing_3','pix_unit_3','n_source_1','n_timing_1','n_rate_1','n_unit_1','n_source_2','n_timing_2','n_rate_2','n_unit_2','n_source_3',
         'n_timing_3','n_rate_3', 'n_unit_3','defoliation_source_1','defoliation_timing_1','defoliation_rate_1','defoliation_unit_1',
         'defoliation_source_2','defoliation_timing_2','defoliation_rate_2','defoliation_unit_2','defoliation_source_3','defoliation_timing_3',
-        'defoliation_rate_3','defoliation_unit_3','uav_raw','satellite_raw','uav_orthomosiac_RGB','uav_orthomosiac_MS','uav_dsm','metadata'
+        'defoliation_rate_3','defoliation_unit_3', 'harvest_date','uav_raw','satellite_raw','uav_orthomosiac_RGB','uav_orthomosiac_MS','uav_dsm','metadata'
     )
 
 @admin.register(uav_data)
 class ProjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
-        'experiment_id','fid','feature','emergence_data', 'Yield',
+        'id','experiment_id','fid','feature','emergence_data', 'Yield',
         'd_1_1','d_1_2','d_1_3','d_1_4','d_1_5','d_1_6','d_1_7','d_1_8','d_1_9','d_1_10','d_1_11','d_1_12','d_1_13','d_1_14',
         'd_1_15','d_1_16','d_1_17','d_1_18','d_1_19','d_1_20','d_1_21','d_1_22','d_1_23','d_1_24','d_1_25','d_1_26','d_1_27',
         'd_1_28','d_1_29','d_1_30','d_1_31','d_2_1','d_2_2','d_2_3','d_2_4','d_2_5','d_2_6','d_2_7','d_2_8','d_2_9','d_2_10',
@@ -83,7 +83,7 @@ class ProjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 @admin.register(satellite_data)
 class ProjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
-        'experiment_id','fid','feature','emergence_data',
+        'id','experiment_id','fid','feature','emergence_data',
         'd_1_1','d_1_2','d_1_3','d_1_4','d_1_5','d_1_6','d_1_7','d_1_8','d_1_9','d_1_10','d_1_11','d_1_12','d_1_13','d_1_14',
         'd_1_15','d_1_16','d_1_17','d_1_18','d_1_19','d_1_20','d_1_21','d_1_22','d_1_23','d_1_24','d_1_25','d_1_26','d_1_27',
         'd_1_28','d_1_29','d_1_30','d_1_31','d_2_1','d_2_2','d_2_3','d_2_4','d_2_5','d_2_6','d_2_7','d_2_8','d_2_9','d_2_10',
@@ -119,7 +119,7 @@ class ProjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 @admin.register(forecasted_data_uav)
 class ProjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
-        'experiment_id','fid','feature','emergence_data', 'forecasting_date', 'pridicted_yield',
+        'id','experiment_id','fid','feature','emergence_data', 'forecasting_date', 'pridicted_yield',
         'd_1_1','d_1_2','d_1_3','d_1_4','d_1_5','d_1_6','d_1_7','d_1_8','d_1_9','d_1_10','d_1_11','d_1_12','d_1_13','d_1_14',
         'd_1_15','d_1_16','d_1_17','d_1_18','d_1_19','d_1_20','d_1_21','d_1_22','d_1_23','d_1_24','d_1_25','d_1_26','d_1_27',
         'd_1_28','d_1_29','d_1_30','d_1_31','d_2_1','d_2_2','d_2_3','d_2_4','d_2_5','d_2_6','d_2_7','d_2_8','d_2_9','d_2_10',
@@ -154,7 +154,7 @@ class ProjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 @admin.register(forecasted_data_satellite)
 class ProjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = (
-        'experiment_id','fid','feature','emergence_data', 'forecasting_date', 'pridicted_yield',
+        'id','experiment_id','fid','feature','emergence_data', 'forecasting_date', 'pridicted_yield',
         'd_1_1','d_1_2','d_1_3','d_1_4','d_1_5','d_1_6','d_1_7','d_1_8','d_1_9','d_1_10','d_1_11','d_1_12','d_1_13','d_1_14',
         'd_1_15','d_1_16','d_1_17','d_1_18','d_1_19','d_1_20','d_1_21','d_1_22','d_1_23','d_1_24','d_1_25','d_1_26','d_1_27',
         'd_1_28','d_1_29','d_1_30','d_1_31','d_2_1','d_2_2','d_2_3','d_2_4','d_2_5','d_2_6','d_2_7','d_2_8','d_2_9','d_2_10',
