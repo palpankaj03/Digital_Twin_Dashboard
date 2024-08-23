@@ -79,6 +79,11 @@ class ProjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'd_12_13','d_12_14','d_12_15','d_12_16','d_12_17','d_12_18','d_12_19','d_12_20','d_12_21','d_12_22','d_12_23',
         'd_12_24','d_12_25','d_12_26','d_12_27','d_12_28','d_12_29','d_12_30','d_12_31'
     )
+    ordering = (
+        'id','experiment_id','fid','feature','emergence_data', 'Yield'
+    )
+    search_fields = ('id','experiment_id','fid','feature')
+    list_filter = ('experiment_id', 'feature')
 
 @admin.register(uav_data_interpolated)
 class ProjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
@@ -114,6 +119,11 @@ class ProjectAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         'd_12_13','d_12_14','d_12_15','d_12_16','d_12_17','d_12_18','d_12_19','d_12_20','d_12_21','d_12_22','d_12_23',
         'd_12_24','d_12_25','d_12_26','d_12_27','d_12_28','d_12_29','d_12_30','d_12_31'
     )
+    ordering = (
+        'id','experiment_id','fid','feature','emergence_data'
+    )
+    search_fields = ('id','experiment_id','fid','feature')
+    list_filter = ('experiment_id', 'feature')
 
 
 @admin.register(satellite_data)
